@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.ActionLogs
 {
     public class ActionLog : BaseEntity
@@ -12,6 +13,7 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.ActionLogs
         public int CustomerId { get; set; }
         public int SubjectId { get; set; }
         public DateTime CreatedOn { get; set; }
+        public List<Media.Picture> Pictures { get; set; }
 
     }
 }

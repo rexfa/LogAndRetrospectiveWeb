@@ -8,6 +8,7 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Locations
         public string LocationData { get; set; }
         public bool Deleted { get; set; }
         public DateTime CreatedOn { get; set; }
-
+        public int SubjectId { get; set; }
+        public virtual Subjects.Subject Subject { get; set; }
     }
 }

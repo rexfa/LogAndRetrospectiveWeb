@@ -39,6 +39,8 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DataContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DbContextConnection")));
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -48,6 +50,8 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            //加数据库服务
+
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
