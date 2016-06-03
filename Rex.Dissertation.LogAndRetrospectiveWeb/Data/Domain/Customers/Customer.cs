@@ -15,5 +15,6 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers
         public List<Flows.FlowCustomerMapping> Observers { get; set; }
         public List<Flows.FlowSubjectMapping> FlowSubjects { get; set; }
         public List<Media.Picture> Pictures { get; set; }
+        public List<ActionLogs.ActionLog> ActionLogs { get; set; }
     }
 }

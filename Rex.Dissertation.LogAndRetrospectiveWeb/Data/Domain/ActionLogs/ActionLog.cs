@@ -14,6 +14,8 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.ActionLogs
         public int SubjectId { get; set; }
         public DateTime CreatedOn { get; set; }
         public List<Media.Picture> Pictures { get; set; }
+        public virtual Customers.Customer Customer { get; set; }
+        public virtual Subjects.Subject Sunject { get; set; }
 
     }
 }

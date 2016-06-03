@@ -8,7 +8,7 @@ using Rex.Dissertation.LogAndRetrospectiveWeb.Data;
 namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20160526112258_DataContextMigration")]
+    [Migration("20160527064730_DataContextMigration")]
     partial class DataContextMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,10 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
                     b.Property<int>("SubjectId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("ActionLogs");
                 });
@@ -70,6 +74,10 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ObserverCustomerId");
+
+                    b.HasIndex("ProducerCustomerId");
+
                     b.ToTable("FlowCustomerMappings");
                 });
 
@@ -87,6 +95,10 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
                     b.Property<int>("Tag");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ObserverCustomerId");
+
+                    b.HasIndex("ProducerSubjectId");
 
                     b.ToTable("FlowSubjectMappings");
                 });
@@ -108,6 +120,8 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SubjectId");
+
                     b.ToTable("Locations");
                 });
 
@@ -126,6 +140,12 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ActionLogId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("SubjectId");
+
                     b.ToTable("Pictures");
                 });
 
@@ -141,6 +161,71 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.ActionLogs.ActionLog", b =>
+                {
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers.Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Subjects.Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Flows.FlowCustomerMapping", b =>
+                {
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers.Customer")
+                        .WithMany()
+                        .HasForeignKey("ObserverCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers.Customer")
+                        .WithMany()
+                        .HasForeignKey("ProducerCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Flows.FlowSubjectMapping", b =>
+                {
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers.Customer")
+                        .WithMany()
+                        .HasForeignKey("ObserverCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Subjects.Subject")
+                        .WithMany()
+                        .HasForeignKey("ProducerSubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Locations.Location", b =>
+                {
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Subjects.Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Media.Picture", b =>
+                {
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.ActionLogs.ActionLog")
+                        .WithMany()
+                        .HasForeignKey("ActionLogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Customers.Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Rex.Dissertation.LogAndRetrospectiveWeb.Data.Domain.Subjects.Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

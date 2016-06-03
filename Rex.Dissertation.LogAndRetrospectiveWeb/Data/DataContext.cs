@@ -28,6 +28,7 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Picture> Pictures { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<SubjectType> SubjectTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ActionLog>(entity=> 
@@ -35,20 +36,23 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.HasMany(e => e.Pictures).WithOne().HasForeignKey(e => e.ActionLogId);
-                entity.Ignore(e => e.Pictures);
+                //entity.Ignore(e => e.Pictures);
+                entity.Ignore(e => e.Customer);
+                entity.Ignore(e => e.Sunject);
             });
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
-                entity.HasMany(e => e.Observers).WithOne().HasForeignKey(e=>e.ObserverCustomerId);
-                entity.HasMany(e => e.Producers).WithOne().HasForeignKey(e=>e.ProducerCustomerId);
+                entity.HasMany(e => e.Observers).WithOne().HasForeignKey(e=>e.ProducerCustomerId);
+                entity.HasMany(e => e.Producers).WithOne().HasForeignKey(e=>e.ObserverCustomerId);
                 entity.HasMany(e => e.FlowSubjects).WithOne().HasForeignKey(e => e.ObserverCustomerId);
                 entity.HasMany(e => e.Pictures).WithOne().HasForeignKey(e => e.CustomerId);
-                entity.Ignore(e => e.Pictures);
-                entity.Ignore(e => e.Observers);
-                entity.Ignore(e => e.Producers);
-                entity.Ignore(e => e.FlowSubjects);
+                entity.HasMany(e => e.ActionLogs).WithOne().HasForeignKey(e => e.CustomerId);
+                //entity.Ignore(e => e.Pictures);
+                //entity.Ignore(e => e.Observers);
+                //entity.Ignore(e => e.Producers);
+                //entity.Ignore(e => e.FlowSubjects);
             });
             modelBuilder.Entity<FlowCustomerMapping>(entity =>
             {
@@ -82,13 +86,16 @@ namespace Rex.Dissertation.LogAndRetrospectiveWeb.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
-                entity.HasMany(e => e.Observers).WithOne().HasForeignKey(e => e.ObserverCustomerId);
+                entity.HasMany(e => e.Observers).WithOne().HasForeignKey(e => e.ProducerSubjectId);
                 entity.HasMany(e => e.Pictures).WithOne().HasForeignKey(e => e.SubjectId);
                 entity.HasMany(e => e.Locations).WithOne().HasForeignKey(e => e.SubjectId);
-                entity.Ignore(e => e.Pictures);
-                entity.Ignore(e => e.Observers);
-                entity.Ignore(e => e.Locations);
+                entity.HasMany(e => e.ActionLogs).WithOne().HasForeignKey(e => e.SubjectId);
+                entity.HasOne(e => e.SubjectType).WithMany().HasForeignKey(e => e.SubjectTypeId);
+                //entity.Ignore(e => e.Pictures);
+                //entity.Ignore(e => e.Observers);
+                //entity.Ignore(e => e.Locations);
             });
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
